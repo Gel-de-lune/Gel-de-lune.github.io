@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Liz</title>
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+  <header>
+    <h1 id="project-name">Liz</h1>
+    <span id="user-name" onclick="onUserNameClick();">Undefined</span>
+  </header>
+  <div id="container">
+    
+    <div class="connecter-group">
+      <img class="icon" src="images/keyboard.svg"></img>
+      <select id="user-devices">
+      </select>
+    </div><svg width="10%" height="10%" viewBox="0 0 10 10">
+      <line x1="0%" y1="90%" x2="100%" y2="90%" stroke="#2f5597"></line>
+    </svg><div class="connecter-group">
+      <img class="icon" src="images/user.svg"></img>
+      <select id="connected-users">
+      </select>
+    </div><svg width="10%" height="10%" viewBox="0 0 10 10">
+      <line x1="0%" y1="90%" x2="100%" y2="90%" stroke="#2f5597"></line>
+    </svg><div class="connecter-group">
+      <img class="icon" src="images/speaker.svg"></img>
+      <select id="target-outputs">
+        <option selected>monlogue</option>
+        <option>micro KEY</option>
+        <option>KRONOS2</option>
+        <option>volca FM</option>
+        <option>TRITON Extreme</option>
+      </select>
+    </div>
+    <div class="controller">
+      <h2>MIDI CONTROLLER</h2>
+    </div>
+    
+  </div>
+    
+  <footer><span>©2016 Liz Developers</span></footer>
+  <script src="./dist/0.3/peer.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
