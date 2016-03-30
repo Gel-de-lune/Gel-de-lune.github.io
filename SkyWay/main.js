@@ -1,3 +1,5 @@
+var API_KEY = '5c4a8074-a5dc-4579-9d4f-6d405f281302';
+
 var peer;
 var inputs = [];
 var outputs = [];
@@ -8,6 +10,8 @@ var selected_conn;
 var selected_output;
 var audioctx;
 
+
+
 window.onload = function() {
   editUserName();
   
@@ -17,10 +21,7 @@ window.onload = function() {
 
   initUserMedia();
 
-  peer = new Peer({
-    key: '5c4a8074-a5dc-4579-9d4f-6d405f281302',
-    debug: 1
-  });
+  peer = new Peer({key: API_KEY, debug: 1});
   setPeerCallbacks(peer);
 };
 
@@ -94,10 +95,12 @@ function createUserMIDIOutputs(midiAccess) {
 
 function onChangeDevice(select) {
   console.log("onChangeDevice");
-  var option = select.options[select.selectedIndex];
-  var input = inputs[option.value];
-  if (input.onmidimessage === null) {
-    input.onmidimessage = onMIDImessage;
+  if (select.options.length !== 0) {
+    var option = select.options[select.selectedIndex];
+    var input = inputs[option.value];
+    if (input.onmidimessage === null) {
+      input.onmidimessage = onMIDImessage;
+    }
   }
 }
 
@@ -239,6 +242,10 @@ function setConnCallbacks(conn) {
     function (data) {
       console.log('Conn on data.');
       if (typeof data === "string") {
+        if (data === "open loopback") {
+          var call = peer.call(conn.peer, mediaStream);
+          setCallCallbacks(call);
+        }
       }
       else if (typeof data === "object") {
         if (data.metadata !== undefined) {
@@ -276,13 +283,14 @@ function setCallCallbacks(call) {
     'stream',
     function(stream) {
       console.log('Call on stream.');
-      var source = audioctx.createMediaStreamSource(stream);
-      source.connect(audioctx.destination);
+      // var source = audioctx.createMediaStreamSource(stream);
+      // source.connect(audioctx.destination);
       // var audioTracks = stream.getAudioTracks();
       // window.stream = stream;
-      // var audio = document.getElementById("output");
+      var audio = document.getElementById("audio");
       // audio.srcObject = stream;
-      // audio.src = window.URL.createObjectURL(stream);
+      audio.src = window.URL.createObjectURL(stream);
+      audio.play();
     }
   );
   call.on(
@@ -322,9 +330,6 @@ function onChangeConnectedUsers(select) {
   
   selected_conn = data.conn;
   createOutputsList(data.outputs);
-  
-  var call = peer.call(data.id, mediaStream);
-  setCallCallbacks(call);
 }
 
 function createOutputsList(outputs) {
@@ -344,10 +349,22 @@ function createOutputsList(outputs) {
 }
 
 function onChangeTargetOutputs(select) {
-  var selected_option = select.options[select.selectedIndex];
-  selected_conn.send({'target' : selected_option.value});
+  if (select.options.length !== 0) {
+    var selected_option = select.options[select.selectedIndex];
+    selected_conn.send({'target' : selected_option.value});
+  }
 }
 
 function onUserNameClick() {
   editUserName();
+}
+
+function onClickSpeakerIcon() {
+  var select = document.getElementById("connected-users");
+  var option = select.options[select.selectedIndex];
+  var data = users[option.value];
+  data.conn.send("open loopback");
+  
+  // var call = peer.call(data.conn.peer, mediaStream);
+  // setCallCallbacks(call);
 }
