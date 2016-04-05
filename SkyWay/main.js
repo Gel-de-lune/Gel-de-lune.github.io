@@ -82,7 +82,8 @@ function createUserMIDIInputs(midiAccess) {
       select.appendChild(option);
     }
   }
-  select.onchange = function() {onChangeDevice(select); };
+  select.onchange = function() { onChangeDevice(select); };
+  onChangeDevice(select);
 }
 
 function createUserMIDIOutputs(midiAccess) {
