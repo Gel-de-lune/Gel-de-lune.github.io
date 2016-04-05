@@ -23,6 +23,7 @@ window.onload = function() {
 
   peer = new Peer({key: API_KEY, debug: 1});
   setPeerCallbacks(peer);
+  
 };
 
 function editUserName() {
@@ -81,7 +82,7 @@ function createUserMIDIInputs(midiAccess) {
       select.appendChild(option);
     }
   }
-  select.onchange = onChangeDevice(select);
+  select.onchange = function() {onChangeDevice(select); };
 }
 
 function createUserMIDIOutputs(midiAccess) {
@@ -111,6 +112,7 @@ function onMIDImessage(event) {
 
 /* UserMedia function */
 function initUserMedia() {
+  if (util.browser === 'Chrome') {
   navigator.webkitGetUserMedia(
     {'audio':
       {'mandatory':
@@ -125,6 +127,7 @@ function initUserMedia() {
     onGetUserMediaSuccess,
     onGetUserMediaFailure
   );
+  }
   
   if (window.AudioContext) {
     audioctx = new AudioContext();
@@ -285,6 +288,7 @@ function setCallCallbacks(call) {
       console.log('Call on stream.');
       // var source = audioctx.createMediaStreamSource(stream);
       // source.connect(audioctx.destination);
+      // source.start(0);
       // var audioTracks = stream.getAudioTracks();
       // window.stream = stream;
       var audio = document.getElementById("audio");
@@ -318,7 +322,7 @@ function createUserList() {
     option.value = key;
     select.appendChild(option);
   }
-  select.onchange = onChangeConnectedUsers(select);
+  select.onchange = function() {onChangeConnectedUsers(select); };
 }
 
 /* User Action */
@@ -345,7 +349,7 @@ function createOutputsList(outputs) {
       select.appendChild(option);
     }
   }
-  select.onchange = onChangeTargetOutputs(select);
+  select.onchange = function() { onChangeTargetOutputs(select); };
 }
 
 function onChangeTargetOutputs(select) {
