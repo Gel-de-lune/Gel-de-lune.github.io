@@ -322,7 +322,8 @@ function createUserList() {
     option.value = key;
     select.appendChild(option);
   }
-  select.onchange = function() {onChangeConnectedUsers(select); };
+  select.onchange = function() { onChangeConnectedUsers(select); };
+  onChangeConnectedUsers(select);
 }
 
 /* User Action */
@@ -350,6 +351,7 @@ function createOutputsList(outputs) {
     }
   }
   select.onchange = function() { onChangeTargetOutputs(select); };
+  onChangeTargetOutputs(select);
 }
 
 function onChangeTargetOutputs(select) {
